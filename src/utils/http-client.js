@@ -33,9 +33,7 @@ export default class HttpClient {
      */
     read (apiPath, method = 'GET', addHeaders = {}) {
         const url = `${this.apiUrl}${apiPath}`;
-        const headers = _.assign({}, addHeaders);
-        if (this.apiKeyUsage)
-            headers = _.assign({ 'Authorization', 'Bearer ' + this.options.apikey }, headers);
+        const headers = _.assign({}, addHeaders, this.apiKeyHeader);
         debug(`${method} ${url}`);
         debug(`headers: ${JSON.stringify(headers)}`);
         return axios({
@@ -67,9 +65,7 @@ export default class HttpClient {
      */
     sendJSON (apiPath, body, method = 'POST', addHeaders = {}) {
         const url = `${this.apiUrl}${apiPath}`;
-        const headers = _.assign({'Content-Type': 'application/json'}, addHeaders, this.jsonHeader);
-        if (this.apiKeyUsage)
-            headers = _.assign({ 'Authorization', 'Bearer ' + this.options.apikey }, headers);
+        const headers = _.assign({'Content-Type': 'application/json'}, addHeaders, this.jsonHeader, this.apiKeyHeader);
         return axios({
             url,
             method,
@@ -93,6 +89,15 @@ export default class HttpClient {
         return {
             Accept: 'application/json'
         };
+    }
+
+    /**
+     * @returns {{}}
+     */
+    get apiKeyHeader () {
+        return this.apiKeyUsage ? {
+            Authorization: 'Bearer ' + this.options.apikey
+        } : {};
     }
 
     /**

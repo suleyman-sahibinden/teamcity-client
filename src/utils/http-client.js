@@ -10,8 +10,8 @@ import createDebug from 'debug';
 import axios from 'axios';
 import {toJSON} from './index';
 
-const GUEST_USER = 'guestAuth';
-const HTTP_USER = 'httpAuth';
+const GUEST_USER = '/guestAuth';
+const HTTP_USER = '/httpAuth';
 const debug = createDebug('teamcity-client');
 
 export default class HttpClient {
@@ -105,7 +105,7 @@ export default class HttpClient {
      * @returns {String}
      */
     get apiUrl () {
-        return `${this.options.protocol}${this.authUrlPart}${this.options.host}/${this.accessType}/app/rest/`;
+        return `${this.options.protocol}${this.authUrlPart}${this.options.host}/${this.accessType}app/rest/`;
     }
 
     /**
@@ -129,9 +129,11 @@ export default class HttpClient {
      * @returns {*}
      */
     get accessType () {
-        if (this.httpAccess || this.apiKeyUsage) {
+        if (this.httpAccess) {
             return HTTP_USER;
-        }
+        } else if (this.apiKeyUsage){
+            return "";
+        }        
         return GUEST_USER;
     }
 

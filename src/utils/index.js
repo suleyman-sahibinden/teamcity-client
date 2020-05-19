@@ -8,7 +8,7 @@
  * @returns {Object}
  */
 export function toJSON(body) {
-    return parseJSON(body.toString('utf-8'));
+    return parseJSON(body);
 }
 
 /**

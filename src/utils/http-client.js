@@ -34,6 +34,8 @@ export default class HttpClient {
     read (apiPath, method = 'GET', addHeaders = {}) {
         const url = `${this.apiUrl}${apiPath}`;
         const headers = _.assign({}, addHeaders);
+        if (this.apiKeyUsage)
+            headers = _.assign({ 'Authorization', 'Bearer ' + this.options.apikey }, headers);
         debug(`${method} ${url}`);
         debug(`headers: ${JSON.stringify(headers)}`);
         return axios({
@@ -66,6 +68,8 @@ export default class HttpClient {
     sendJSON (apiPath, body, method = 'POST', addHeaders = {}) {
         const url = `${this.apiUrl}${apiPath}`;
         const headers = _.assign({'Content-Type': 'application/json'}, addHeaders, this.jsonHeader);
+        if (this.apiKeyUsage)
+            headers = _.assign({ 'Authorization', 'Bearer ' + this.options.apikey }, headers);
         return axios({
             url,
             method,
@@ -108,11 +112,19 @@ export default class HttpClient {
     }
 
     /**
+     * Is apikey usage
+     * @returns {boolean}
+     */
+    get apiKeyUsage () {
+        return _.isString(this.options.apikey);
+    }
+
+    /**
      * guest user or authorized
      * @returns {*}
      */
     get accessType () {
-        if (this.httpAccess) {
+        if (this.httpAccess || this.apiKeyUsage) {
             return HTTP_USER;
         }
         return GUEST_USER;

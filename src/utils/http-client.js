@@ -39,8 +39,8 @@ export default class HttpClient {
         return axios({
             url,
             method,
-            headers,
-            responseType: 'arraybuffer'
+            headers
+            //responseType: 'arraybuffer'
         }).then(resp => resp.data);
     }
 

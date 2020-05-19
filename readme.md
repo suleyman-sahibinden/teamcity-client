@@ -8,7 +8,8 @@ const TeamcityClient = require('teamcity-client');
 const api = new TeamcityClient({
     host: 'teamcity.domain.com',
     user: 'username', // optional
-    password: 'pwd' // optional
+    password: 'pwd', // optional
+    apikey: 'api-key' // optional
 });
 ```
 
